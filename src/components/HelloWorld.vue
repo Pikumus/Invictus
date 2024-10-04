@@ -1,134 +1,172 @@
 <template>
-  <div class="hello">
-    <h1>{{ msg }}</h1>
-    <p>
-      For a guide and recipes on how to configure / customize this project,<br />
-      check out the
-      <a href="https://cli.vuejs.org" target="_blank" rel="noopener"
-        >vue-cli documentation</a
-      >.
-    </p>
-    <h3>Installed CLI Plugins</h3>
-    <ul>
-      <li>
-        <a
-          href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-babel"
-          target="_blank"
-          rel="noopener"
-          >babel</a
-        >
-      </li>
-      <li>
-        <a
-          href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-router"
-          target="_blank"
-          rel="noopener"
-          >router</a
-        >
-      </li>
-      <li>
-        <a
-          href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-eslint"
-          target="_blank"
-          rel="noopener"
-          >eslint</a
-        >
-      </li>
-      <li>
-        <a
-          href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-typescript"
-          target="_blank"
-          rel="noopener"
-          >typescript</a
-        >
-      </li>
-    </ul>
-    <h3>Essential Links</h3>
-    <ul>
-      <li>
-        <a href="https://vuejs.org" target="_blank" rel="noopener">Core Docs</a>
-      </li>
-      <li>
-        <a href="https://forum.vuejs.org" target="_blank" rel="noopener"
-          >Forum</a
-        >
-      </li>
-      <li>
-        <a href="https://chat.vuejs.org" target="_blank" rel="noopener"
-          >Community Chat</a
-        >
-      </li>
-      <li>
-        <a href="https://twitter.com/vuejs" target="_blank" rel="noopener"
-          >Twitter</a
-        >
-      </li>
-      <li>
-        <a href="https://news.vuejs.org" target="_blank" rel="noopener">News</a>
-      </li>
-    </ul>
-    <h3>Ecosystem</h3>
-    <ul>
-      <li>
-        <a href="https://router.vuejs.org" target="_blank" rel="noopener"
-          >vue-router</a
-        >
-      </li>
-      <li>
-        <a href="https://vuex.vuejs.org" target="_blank" rel="noopener">vuex</a>
-      </li>
-      <li>
-        <a
-          href="https://github.com/vuejs/vue-devtools#vue-devtools"
-          target="_blank"
-          rel="noopener"
-          >vue-devtools</a
-        >
-      </li>
-      <li>
-        <a href="https://vue-loader.vuejs.org" target="_blank" rel="noopener"
-          >vue-loader</a
-        >
-      </li>
-      <li>
-        <a
-          href="https://github.com/vuejs/awesome-vue"
-          target="_blank"
-          rel="noopener"
-          >awesome-vue</a
-        >
-      </li>
-    </ul>
+  <div class="poem-button">
+    <div class="controls">
+      <button
+        v-for="(stanza, index) in visibleStanzas"
+        :key="index"
+        :class="{ active: !visibleStanzas[index] }"
+        @click="toggleVisibility(index)"
+        class="btn"
+      ></button>
+    </div>
+    <div class="poem">
+      <div class="description">
+        <h1 class="title">Invictus</h1>
+        <span class="sub-title">By William Ernest Henley</span>
+      </div>
+      <div v-if="visibleStanzas[0]" class="stanza">
+        <span>Out of the night that covers me,</span>
+        <span>Black as the pit from pole to pole,</span>
+        <span>I thank whatever gods may be</span>
+        <span>For my unconquerable soul.</span>
+      </div>
+      <div v-if="visibleStanzas[1]" class="stanza">
+        <span> In the fell clutch of circumstance, </span>
+        <span> I have not winced nor cried aloud. </span>
+        <span> Under the bludgeonings of chance </span>
+        <span> My head is bloody, but unbowed. </span>
+      </div>
+      <div v-if="visibleStanzas[2]" class="stanza">
+        <span>Beyond this place of wrath and tears </span>
+        <span>Looms but the Horror of the shade, </span>
+        <span>And yet the menace of the years </span
+        ><span>Finds and shall find me unafraid. </span>
+      </div>
+      <div v-if="visibleStanzas[3]" class="stanza">
+        <span>It matters not how strait the gate,</span>
+        <span>How charged with punishments the scroll,</span>
+        <span>I am the master of my fate,</span>
+        <span>I am the captain of my soul.</span>
+      </div>
+    </div>
   </div>
 </template>
 
-<script lang="ts">
-import { Options, Vue } from "vue-class-component";
+<script setup lang="ts">
+import { ref } from "vue";
 
-@Options({
-  props: {
-    msg: String,
-  },
-})
-export default class HelloWorld extends Vue {
-  msg!: string;
-}
+// Состояние видимости каждого четверостишия
+const visibleStanzas = ref([true, true, true, true]);
+
+// Функция переключения видимости четверостиший
+const toggleVisibility = (index: number) => {
+  // Подсчет количества видимых четверостиший
+  const visibleCount = visibleStanzas.value.filter(Boolean).length;
+
+  // Не даем отключить последнее видимое четверостишие
+  if (visibleCount === 1 && visibleStanzas.value[index]) {
+    return;
+  }
+
+  // Используем spread оператор для обновления состояния
+  visibleStanzas.value = [
+    ...visibleStanzas.value.slice(0, index),
+    !visibleStanzas.value[index],
+    ...visibleStanzas.value.slice(index + 1),
+  ];
+};
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
-h3 {
-  margin: 40px 0 0;
-}
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
-a {
-  color: #42b983;
+.poem-button {
+  background-color: #f5f5f5;
+  font-family: serif;
+  padding: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  min-height: 100vh;
+
+  .controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-right: 20px;
+    margin-top: 3rem;
+
+    .btn {
+      border: 1px solid black;
+      background-color: #000;
+      color: white;
+      padding: 0.5rem 0.5rem;
+      border-radius: 0;
+      cursor: pointer;
+
+      &:hover {
+        background-color: #444;
+      }
+
+      &.active {
+        background-color: transparent;
+      }
+    }
+  }
+
+  .poem {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    max-width: 700px;
+
+    .description {
+      display: flex;
+      align-items: center;
+      gap: 5rem;
+      justify-content: center;
+
+      .title {
+        margin-left: 5rem;
+        font-size: 2rem; /* Размер заголовка */
+      }
+
+      .sub-title {
+        font-size: 1rem; /* Размер подзаголовка */
+        margin-top: 0.5rem;
+        color: gray;
+      }
+    }
+
+    .stanza {
+      margin-top: 1rem;
+      font-size: 1.25rem;
+      text-align: left;
+
+      span {
+        display: block; /* Каждая строка на новой строке */
+      }
+
+      span:nth-child(even) {
+        text-indent: 2em; /* Отступ для каждой второй строки */
+      }
+    }
+  }
+
+  @media (max-width: 768px) {
+    .poem {
+      max-width: 90%; /* Уменьшение ширины на мобильных */
+
+      .title {
+        font-size: 1.5rem; /* Меньший заголовок на мобильных */
+      }
+
+      .stanza {
+        font-size: 1rem; /* Меньший текст на мобильных */
+      }
+    }
+  }
+
+  @media (min-width: 1600px) {
+    .poem {
+      max-width: 50%; /* Уменьшение ширины на очень больших экранах */
+
+      .title {
+        font-size: 2.5rem; /* Увеличение заголовка */
+      }
+
+      .stanza {
+        font-size: 1.5rem; /* Увеличение текста для удобства чтения */
+      }
+    }
+  }
 }
 </style>
