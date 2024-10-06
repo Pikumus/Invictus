@@ -128,8 +128,9 @@ const toggleVisibility = (index: number) => {
 
     .stanza {
       margin-top: 1rem;
-      font-size: 1.25rem;
+      font-size: 1rem;
       text-align: left;
+      letter-spacing: 1px;
 
       span {
         display: block; /* Каждая строка на новой строке */

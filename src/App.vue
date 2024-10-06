@@ -1,10 +1,10 @@
 <template>
   <div id="app">
-    <hello-world />
+    <stanza-display />
   </div>
 </template>
 
 <style lang="scss"></style>
 <script setup lang="ts">
-import HelloWorld from "@/components/HelloWorld.vue";
+import StanzaDisplay from "@/components/StanzaDisplay.vue";
 </script>
